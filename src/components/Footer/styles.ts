@@ -6,6 +6,7 @@ export const FooterContainer = styled.div`
   width: 100%;
   text-align: center;
   padding: 40px 0;
+  margin-top: 120px;
 `
 export const Logo = styled.img`
   margin-bottom: 32px;

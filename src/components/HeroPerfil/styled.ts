@@ -1,15 +1,14 @@
 import styled from "styled-components";
-import fundoPerfil from '../../Assets/Images/fundo_perfil.png'
 
 export const Container = styled.div`
   position: relative;
-  background-image: url(${fundoPerfil});
   background-repeat: no-repeat;
   background-size: cover;
   padding-top: 24px;
   padding-bottom: 32px;
   width: 100%;
   height: 280px;
+  margin-bottom: 56px;
 
   &::after {
     position: absolute;

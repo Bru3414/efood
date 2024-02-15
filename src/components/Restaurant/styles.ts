@@ -3,8 +3,14 @@ import { cores } from "../../styles";
 import { TagInfo, TagLink } from "../Tag/styles";
 
 export const Card = styled.div`
-  border: 2px solid ${cores.pink};
   position: relative;
+
+  > img {
+    display: block;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+  }
   `
 
 export const Infos = styled.div`
@@ -25,6 +31,9 @@ export const Infos = styled.div`
 export const CardBody = styled.div`
   color: ${cores.pink};
   padding: 8px;
+  border-bottom: 2px solid ${cores.pink};
+  border-left: 2px solid ${cores.pink};
+  border-right: 2px solid ${cores.pink};
 `
 
 export const CardHeader = styled.div`

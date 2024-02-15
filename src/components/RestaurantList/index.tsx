@@ -1,10 +1,10 @@
 import * as S from './styles'
 
-import Restaurants from "../../Models/Restaurants"
 import Restaurant from "../Restaurant"
+import { Estabelecimento } from '../../pages/Home'
 
 type Props = {
-  restaurants: Restaurants[]
+  restaurants: Estabelecimento[]
 }
 
 const RestaurantList = ({ restaurants }: Props) => (
@@ -13,11 +13,13 @@ const RestaurantList = ({ restaurants }: Props) => (
       {restaurants.map((restaurants) =>
         <Restaurant
           key={restaurants.id}
-          title={restaurants.title}
-          image={restaurants.image}
-          description={restaurants.description}
-          infos={restaurants.infos}
-          nota={restaurants.nota}
+          id={restaurants.id}
+          title={restaurants.titulo}
+          image={restaurants.capa}
+          description={restaurants.descricao}
+          info={restaurants.tipo}
+          nota={restaurants.avaliacao}
+          destacado={restaurants.destacado}
         />)}
     </S.List>
   </S.Container>

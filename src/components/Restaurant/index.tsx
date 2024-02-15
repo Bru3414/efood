@@ -3,18 +3,23 @@ import star from '../../Assets/Images/star.png'
 import Tag from '../Tag'
 
 type Props = {
+  id: number
   title: string
   image: string
   nota: number
   description: string
-  infos: string[]
+  info: string
+  destacado: boolean
 }
 
-const Restaurant = ({ title, image, nota, description, infos }: Props) => (
+const Restaurant = ({ id, title, image, nota, description, info, destacado }: Props) => (
   <S.Card>
     <img src={image} />
     <S.Infos>
-      {infos.map(infos => <Tag type='info' key={infos}>{infos}</Tag>)}
+      {destacado && (
+        <Tag type='info'>Destaque da semana</Tag>
+      )}
+      <Tag type='info'>{info[0].toUpperCase() + info.substring(1)}</Tag>
     </S.Infos>
     <S.CardBody>
       <S.CardHeader>
@@ -27,7 +32,7 @@ const Restaurant = ({ title, image, nota, description, infos }: Props) => (
         </span>
       </S.CardHeader>
       <S.CardDescription>{description}</S.CardDescription>
-      <Tag type='link' to='/perfil'>Saiba mais</Tag>
+      <Tag type='link' to={`/perfil/${id}`}>Saiba mais</Tag>
     </S.CardBody>
   </S.Card>
 )
