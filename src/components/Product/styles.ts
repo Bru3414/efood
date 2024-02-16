@@ -106,16 +106,4 @@ export const ModalContent = styled.div`
   p {
     margin-bottom: 26px;
   }
-
-  button {
-    display: block;
-    margin-top: 20px;
-    padding: 4px;
-    color: ${cores.pink};
-    background-color: ${cores.white};
-    border-color: ${cores.white};
-    cursor: pointer;
-    font-weight: bold;
-    border-style: none;
-  }
 `

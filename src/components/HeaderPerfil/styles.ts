@@ -23,5 +23,6 @@ export const Title = styled.h2`
 export const Carrinho = styled.p`
   font-size: 18px;
   font-weight: bold;
+  cursor: pointer;
 `
 

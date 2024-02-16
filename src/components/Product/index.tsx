@@ -1,24 +1,37 @@
 import * as S from "./styles"
 import close from '../../Assets/Images/close.png'
 import { useState } from "react"
+import Button from "../Button"
+import { useDispatch } from "react-redux"
+import { add, open, idItemMenu } from "../../store/reducers/cart"
+import { Cardapio } from "../../pages/Home"
 
 type Props = {
+  cardapio: Cardapio
   title: string
   img: string
   description: string
   porcao: string
   preco: number
+  id: number
 }
 
-const formataPreco = (preco: number) => {
+export const formataPreco = (preco: number) => {
   return Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL'
   }).format(preco)
 }
 
-const Product = ({ title, img, description, porcao, preco }: Props) => {
+const Product = ({ cardapio, title, img, description, porcao, preco, id }: Props) => {
+  const dispatch = useDispatch()
   const [modalIsVisible, setModalIsVisible] = useState(false)
+
+  const addItem = (item: Cardapio, idItem: number) => {
+    dispatch(idItemMenu(idItem))
+    dispatch(add(item))
+    dispatch(open())
+  }
 
   return (
     <>
@@ -26,7 +39,7 @@ const Product = ({ title, img, description, porcao, preco }: Props) => {
         <img src={img} alt={title} />
         <h3>{title}</h3>
         <p>{description}</p>
-        <button type="button" onClick={() => setModalIsVisible(true)}>Mais detalhes</button>
+        <Button onClick={() => setModalIsVisible(true)}>Mais detalhes</Button>
       </S.CardProduct>
       <S.Modal className={modalIsVisible ? 'visivel' : ''}>
         <S.ModalContent className="container">
@@ -38,7 +51,7 @@ const Product = ({ title, img, description, porcao, preco }: Props) => {
               {description}
             </p>
             <span>Serve: {porcao}</span>
-            <button>Adicionar ao carrinho - {formataPreco(preco)}</button>
+            <Button onClick={() => addItem(cardapio, id)}>{`Adicionar ao carrinho - ${formataPreco(preco)}`}</Button>
           </div>
         </S.ModalContent>
         <div className="overlay" onClick={() => setModalIsVisible(false)} />
