@@ -147,6 +147,7 @@ const Cart = () => {
     }else {
       return <>
         <S.NenhumProduto>Nenhum produto no carrinho</S.NenhumProduto>
+        <Button fullWidth={true} onClick={() => dispatch(close())}>Voltar</Button>
       </>
     }
   }

@@ -137,4 +137,5 @@ export const NenhumProduto = styled.p`
   width: 100%;
   color: ${cores.white};
   font-weight: bold;
+  margin-bottom: 24px;
 `
