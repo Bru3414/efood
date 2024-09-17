@@ -37,6 +37,10 @@ export const CardProduct = styled.div`
     padding: 4px;
     cursor: pointer;
   }
+
+  @media (max-width: 640px) {
+    margin-bottom: 24px;
+  }
 `
 
 export const Modal = styled.div`
@@ -105,5 +109,29 @@ export const ModalContent = styled.div`
 
   p {
     margin-bottom: 26px;
+  }
+
+  button {
+    margin-top: 24px;
+  }
+
+  @media (max-width: 640px) {
+    max-width: 90%;
+    flex-direction: column;
+    align-items: center;
+
+    .foto {
+      width: 150px;
+      height: 150px;
+      margin: 0 0 8px;
+    }
+
+    h3 {
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+    }
   }
 `

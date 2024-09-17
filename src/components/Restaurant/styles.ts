@@ -11,7 +11,11 @@ export const Card = styled.div`
     height: 220px;
     object-fit: cover;
   }
-  `
+
+  @media (max-width: 640px) {
+    margin-bottom: 24px;
+  }
+`
 
 export const Infos = styled.div`
   display: flex;

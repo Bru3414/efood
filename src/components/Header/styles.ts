@@ -21,5 +21,10 @@ export const Content = styled.div`
     font-size: 36px;
     margin-top: 140px;
     font-weight: bold;
+
+    @media (max-width: 640px) {
+      font-size: 24px;
+      margin-top: 100px;
+    }
   }
 `

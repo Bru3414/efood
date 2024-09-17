@@ -4,7 +4,6 @@ import { Props } from "."
 
 const ButtonContainer = styled.button<Props>`
     display: block;
-    margin-top: 20px;
     padding: 4px;
     color: ${cores.pink};
     background-color: ${cores.white};

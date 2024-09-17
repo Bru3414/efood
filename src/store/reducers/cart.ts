@@ -3,14 +3,16 @@ import { Cardapio } from '../../pages/Home'
 
 type CartState = {
   idItemMenu: number
-  items: Cardapio,
+  items: Cardapio
   isOpen: boolean
+  tela: number
 }
 
 const initialState: CartState = {
   idItemMenu: 0,
   items: [],
-  isOpen: false
+  isOpen: false,
+  tela: 1
 }
 
 const cartSlice = createSlice({
@@ -33,13 +35,20 @@ const cartSlice = createSlice({
     },
     close: (state) => {
       state.isOpen = false
+      state.tela = 1
+    },
+    trocaTela: (state, action:PayloadAction<number>) => {
+      state.tela = action.payload
     },
     idItemMenu: (state, action: PayloadAction<number>) => {
       state.idItemMenu = action.payload
+    },
+    clear: (state) => {
+      state.items = []
     }
   }
 })
 
-export const { add, remove, open, close, idItemMenu } = cartSlice.actions
+export const { add, remove, open, close, trocaTela, idItemMenu, clear } = cartSlice.actions
 
 export default cartSlice.reducer

@@ -1,10 +1,11 @@
-import * as S from "./styles"
-import close from '../../Assets/Images/close.png'
 import { useState } from "react"
-import Button from "../Button"
 import { useDispatch } from "react-redux"
+
 import { add, open, idItemMenu } from "../../store/reducers/cart"
 import { Cardapio } from "../../pages/Home"
+import close from '../../Assets/Images/close.png'
+import * as S from "./styles"
+import Button from "../Button"
 
 type Props = {
   cardapio: Cardapio
@@ -51,7 +52,10 @@ const Product = ({ cardapio, title, img, description, porcao, preco, id }: Props
               {description}
             </p>
             <span>Serve: {porcao}</span>
-            <Button onClick={() => addItem(cardapio, id)}>{`Adicionar ao carrinho - ${formataPreco(preco)}`}</Button>
+            <Button onClick={() => {
+              addItem(cardapio, id)
+              setModalIsVisible(false)
+            }}>{`Adicionar ao carrinho - ${formataPreco(preco)}`}</Button>
           </div>
         </S.ModalContent>
         <div className="overlay" onClick={() => setModalIsVisible(false)} />

@@ -32,4 +32,11 @@ export const SideBarContainer = styled.div`
   width: 100%;
   padding: 32px 8px 0 8px;
   z-index: 1;
+  overflow-y: auto;
+  padding-bottom: 16px;
+
+  @media (max-width: 640px) {
+    max-width: 100%;
+    width: 100%;
+  }
 `
