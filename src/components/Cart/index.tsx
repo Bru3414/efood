@@ -13,6 +13,7 @@ import { remove, trocaTela, close, clear } from "../../store/reducers/cart"
 import { usePurchaseMutation } from '../../services/api'
 
 const Cart = () => {
+  const [verificaFormularioEntrega, setVerificaFormularioEntrega] = useState(false)
   const [ativo4, setAtivo4] = useState(false)
   const [purchase, { data, isSuccess }] = usePurchaseMutation()
   const cart = useSelector((state: RootReducer) => state.cart)
@@ -51,13 +52,13 @@ const Cart = () => {
       nome: Yup.string().min(3, 'Nome inválido').required('Preencha este campo'),
       end: Yup.string().required('Preencha este campo'),
       cidade: Yup.string().required('Preencha este campo'),
-      cep: Yup.string().required('Preencha este campo'),
+      cep: Yup.string().required('Preencha este campo').min(9, 'CEP inválido'),
       numero: Yup.string().required('Preencha este campo'),
       nomeCartao: Yup.string().required('Preencha este campo').min(3, 'Nome inválido'),
-      numeroCartao: Yup.string().required('Preencha este campo'),
-      cvv: Yup.string().required('Preencha este campo'),
+      numeroCartao: Yup.string().required('Preencha este campo').min(19, 'Cartão inválido'),
+      cvv: Yup.string().required('Preencha este campo').min(3, 'CVV inválido'),
       mv: Yup.string().required('Preencha este campo'),
-      av: Yup.string().required('Preencha este campo')
+      av: Yup.string().required('Preencha este campo').min(4, 'Ano inválido')
     }),
     onSubmit: (values) => {
       purchase({
@@ -88,21 +89,43 @@ const Cart = () => {
         }
       })
       setAtivo4(true)
-      values.nome = ''
-      values.end = ''
-      values.cidade = ''
-      values.cep = ''
-      values.numero = ''
-      values.complemento =''
-      values.nomeCartao = ''
-      values.numeroCartao = ''
-      values.cvv = ''
-      values.mv = ''
-      values.av = ''
+      form.resetForm()
     }
   })
 
-  const getErrorMessage = (fieldName: string, message?: string) => {
+  const verificaCamposEntrega = (fielName: string[]) => {
+    const isInvalid = fielName.find(i => {
+      return i in form.errors
+    })
+
+    if (!isInvalid && form.errors && verificaFormularioEntrega) {
+      dispatch(trocaTela(3));
+    }
+  }
+
+  useEffect(() => {
+    verificaCamposEntrega(['nome', 'end', 'cidade', 'cep', 'numero'])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [verificaFormularioEntrega])
+
+  useEffect(() => {
+    form.setTouched(form.touched, true)
+    setVerificaFormularioEntrega(false)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess])
+
+  const getErrorMessageEntrega = (fieldName: string, message?: string) => {
+    const isTouched = fieldName in form.touched
+    const isInvalid = fieldName in form.errors
+
+    if (isInvalid && isTouched || isInvalid && verificaFormularioEntrega){
+        return message
+      }
+    return ''
+  }
+
+
+  const getErrorMessagePagamento = (fieldName: string, message?: string) => {
     const isTouched = fieldName in form.touched
     const isInvalid = fieldName in form.errors
 
@@ -161,28 +184,28 @@ const Cart = () => {
       <S.Campo>
         <label htmlFor="nome">Quem irá receber</label>
         <input id="nome" type="text" name='nome' value={form.values.nome} onChange={form.handleChange} onBlur={form.handleBlur} />
-        <small>{getErrorMessage('nome', form.errors.nome)}</small>
+        <small>{getErrorMessageEntrega('nome', form.errors.nome)}</small>
       </S.Campo>
       <S.Campo>
         <label htmlFor="end">Endereço</label>
         <input id="end" type="text" name='end' value={form.values.end} onChange={form.handleChange} onBlur={form.handleBlur} />
-        <small>{getErrorMessage('end', form.errors.end)}</small>
+        <small>{getErrorMessageEntrega('end', form.errors.end)}</small>
       </S.Campo>
       <S.Campo>
         <label htmlFor="cidade">Cidade</label>
         <input id="cidade" type="text" name='cidade' value={form.values.cidade} onChange={form.handleChange} onBlur={form.handleBlur} />
-        <small>{getErrorMessage('cidade', form.errors.cidade)}</small>
+        <small>{getErrorMessageEntrega('cidade', form.errors.cidade)}</small>
       </S.Campo>
       <S.CepNumDiv>
         <S.Campo>
           <label htmlFor="cep">CEP</label>
-          <InputMask mask="99999-999" id="cep" type="text" name='cep' value={form.values.cep} onChange={form.handleChange} onBlur={form.handleBlur} />
-          <small>{getErrorMessage('cep', form.errors.cep)}</small>
+          <InputMask maskChar="" mask="99999-999" id="cep" type="text" name='cep' value={form.values.cep} onChange={form.handleChange} onBlur={form.handleBlur} />
+          <small>{getErrorMessageEntrega('cep', form.errors.cep)}</small>
         </S.Campo>
         <S.Campo>
           <label htmlFor="numero">Número</label>
           <input id="numero" type="text" name='numero' value={form.values.numero} onChange={form.handleChange} onBlur={form.handleBlur} />
-          <small>{getErrorMessage('numero', form.errors.numero)}</small>
+          <small>{getErrorMessageEntrega('numero', form.errors.numero)}</small>
         </S.Campo>
       </S.CepNumDiv>
       <S.Campo>
@@ -190,7 +213,14 @@ const Cart = () => {
         <input id="complemento" type="text" name='complemento' value={form.values.complemento} onChange={form.handleChange} onBlur={form.handleBlur} />
       </S.Campo>
       <S.ButtonsDiv>
-        <Button fullWidth={true} onClick={() => dispatch(trocaTela(3))}>Continuar com o pagamento</Button>
+        <Button fullWidth={true} onClick={() => {
+          if (verificaFormularioEntrega) {
+            verificaCamposEntrega(['nome', 'end', 'cidade', 'cep', 'numero'])
+          } else {
+            setVerificaFormularioEntrega(true)}
+          }
+        }
+          >Continuar com o pagamento</Button>
         <Button fullWidth={true} onClick={() => dispatch(trocaTela(1))}>Voltar para o carrinho</Button>
       </S.ButtonsDiv>
     </form>
@@ -206,30 +236,30 @@ const Cart = () => {
       <S.Campo>
         <label htmlFor="nomeCartao">Nome do cartão</label>
         <input id="nomeCartao" type="text" name='nomeCartao' value={form.values.nomeCartao} onChange={form.handleChange} onBlur={form.handleBlur} />
-        <small>{getErrorMessage('nomeCartao', form.errors.nomeCartao)}</small>
+        <small>{getErrorMessagePagamento('nomeCartao', form.errors.nomeCartao)}</small>
       </S.Campo>
       <S.NumCvvDiv>
         <S.Campo>
           <label htmlFor="numeroCartao">Número do cartão</label>
-          <InputMask mask="9999 9999 9999 9999" id="numeroCartao" type="text" name='numeroCartao' value={form.values.numeroCartao} onChange={form.handleChange} onBlur={form.handleBlur} />
-          <small>{getErrorMessage('numeroCartao', form.errors.numeroCartao)}</small>
+          <InputMask maskChar="" mask="9999 9999 9999 9999" id="numeroCartao" type="text" name='numeroCartao' value={form.values.numeroCartao} onChange={form.handleChange} onBlur={form.handleBlur} />
+          <small>{getErrorMessagePagamento('numeroCartao', form.errors.numeroCartao)}</small>
         </S.Campo>
         <S.Campo>
           <label htmlFor="cvv">CVV</label>
-          <InputMask mask="999" id="cvv" type="text" name='cvv' value={form.values.cvv} onChange={form.handleChange} onBlur={form.handleBlur} />
-          <small>{getErrorMessage('cvv', form.errors.cvv)}</small>
+          <InputMask maskChar="" mask="999" id="cvv" type="text" name='cvv' value={form.values.cvv} onChange={form.handleChange} onBlur={form.handleBlur} />
+          <small>{getErrorMessagePagamento('cvv', form.errors.cvv)}</small>
         </S.Campo>
       </S.NumCvvDiv>
       <S.CepNumDiv>
         <S.Campo>
           <label htmlFor="mv">Mês de vencimento</label>
-          <InputMask mask="99" id="mv" type="text" name='mv' value={form.values.mv} onChange={form.handleChange} onBlur={form.handleBlur} />
-          <small>{getErrorMessage('mv', form.errors.mv)}</small>
+          <InputMask maskChar="" mask="99" id="mv" type="text" name='mv' value={form.values.mv} onChange={form.handleChange} onBlur={form.handleBlur} />
+          <small>{getErrorMessagePagamento('mv', form.errors.mv)}</small>
         </S.Campo>
         <S.Campo>
           <label htmlFor="av">Ano de vencimento</label>
-          <InputMask mask="9999" id="av" type="text" name='av' value={form.values.av} onChange={form.handleChange} onBlur={form.handleBlur} />
-          <small>{getErrorMessage('av', form.errors.av)}</small>
+          <InputMask maskChar="" mask="9999" id="av" type="text" name='av' value={form.values.av} onChange={form.handleChange} onBlur={form.handleBlur} />
+          <small>{getErrorMessagePagamento('av', form.errors.av)}</small>
         </S.Campo>
       </S.CepNumDiv>
       <S.ButtonsDiv>

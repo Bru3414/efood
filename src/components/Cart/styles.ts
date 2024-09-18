@@ -82,7 +82,11 @@ export const Campo = styled.div`
   }
 
   small {
-    color: ${cores.white}
+    margin-top: 4px;
+    background-color: ${cores.white};
+    color: red;
+    border-radius: 8px;
+    text-align: center;
   }
 `
 
